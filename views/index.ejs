@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Dashboard</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Crypto Dashboard</h1>
+    <div class="crypto-container">
+        <% if (coins && coins.length > 0) { %>
+            <% coins.forEach(function(coin) { %>
+                <div class="crypto">
+                    <h2><%= coin.name %> (<%= coin.symbol.toUpperCase() %>)</h2>
+                    <p>Price: $<%= coin.current_price.toFixed(2) %></p>
+                    <p>Market Cap: $<%= coin.market_cap.toLocaleString() %></p>
+                    <p>24h Change: <%= coin.price_change_percentage_24h.toFixed(2) %> %</p>
+                    <!-- Placeholder for a sparkline graph or other visual representation -->
+                    <div id="chart-<%= coin.id %>" class="chart"></div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No cryptocurrency data available.</p>
+        <% } %>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
