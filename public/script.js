@@ -1,31 +1,33 @@
-const axios = require("axios");
-const MAX_RETRIES = 5; // Maximum number of retries
-const BASE_DELAY = 1000; // Initial delay in milliseconds
+document.addEventListener("DOMContentLoaded", function () {
+  const priceDisplay = document.getElementById("crypto-price"); // Assume an element with this ID in your HTML
 
-async function fetchDataWithRetry(url, retries = 0) {
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    if (
-      error.response &&
-      error.response.status === 429 &&
-      retries < MAX_RETRIES
-    ) {
-      // Wait for a specified delay before retrying
-      const delay = BASE_DELAY * Math.pow(2, retries);
-      console.log(`Waiting for ${delay} ms before retrying...`);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-      return fetchDataWithRetry(url, retries + 1);
-    } else {
-      // Re-throw the error if not a rate limit issue or max retries reached
-      throw error;
+  // Function to fetch cryptocurrency data
+  async function fetchCryptoData() {
+    try {
+      const response = await fetch(
+        "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+      );
+      const data = await response.json();
+      return data.bitcoin.usd;
+    } catch (error) {
+      console.error("Error fetching crypto data:", error);
+      return null;
     }
   }
-}
 
-const url =
-  "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=true";
-fetchDataWithRetry(url)
-  .then((data) => console.log(data))
-  .catch((error) => console.error("Failed to fetch data:", error));
+  // Function to update the webpage with the latest cryptocurrency data
+  async function updateCryptoPrice() {
+    const price = await fetchCryptoData();
+    if (price !== null) {
+      priceDisplay.textContent = `Bitcoin Price: $${price}`;
+    } else {
+      priceDisplay.textContent = "Failed to fetch price";
+    }
+  }
+
+  // Update the price immediately when the page loads
+  updateCryptoPrice();
+
+  // Then update the price every minute (60000 milliseconds)
+  setInterval(updateCryptoPrice, 60000);
+});
