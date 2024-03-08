@@ -25,11 +25,11 @@ cryptoList.forEach((crypto) => {
   const ws = new WebSocket(crypto.url);
   ws.on("message", (data) => {
     const stockObject = JSON.parse(data);
-    const price = parseFloat(stockObject.p).toFixed(2);
+    const price = parseFloat(stockObject.p).toFixed(3);
     io.emit(crypto.symbol, price);
   });
 });
 
 server.listen(3000, () => {
-  console.log("Crypto dashboard running at http://localhost:${port}");
+  console.log("Crypto dashboard running at http://localhost:3000");
 });

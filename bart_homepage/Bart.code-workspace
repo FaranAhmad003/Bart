@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Bart",
+			"path": ".."
+		},
+		{
+			"name": "assets",
+			"path": "../../../Downloads/assets"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Bart"
+	}
+}
