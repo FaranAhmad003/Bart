@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Ticker</title>
+</head>
+<body>
+    <h1>Crypto Prices in EUR</h1>
+    <div id="ETH">Ethereum (ETH): Loading...</div>
+    <div id="BTC">Bitcoin (BTC): Loading...</div>
+    <div id="BNB">Binance Coin (BNB): Loading...</div>
+    <div id="ADA">Cardano (ADA): Loading...</div>
+    <div id="XRP">Ripple (XRP): Loading...</div>
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    
+    let lastPrices = {
+        ETH: null,
+        BTC: null,
+        BNB: null,
+        ADA: null,
+        XRP: null
+    };
+
+    function updatePriceAndColor(symbol, price) {
+        const element = document.getElementById(symbol);
+        element.innerText = `${symbol} (EUR): €${price}`;
+        
+        
+        element.style.color = 
+            !lastPrices[symbol] || lastPrices[symbol] === price
+            ? 'black' 
+            : price > lastPrices[symbol]
+            ? 'green' 
+            : 'red';  
+
+        
+        lastPrices[symbol] = price;
+    }
+
+    socket.on('ETH', price => updatePriceAndColor('ETH', price));
+    socket.on('BTC', price => updatePriceAndColor('BTC', price));
+    socket.on('BNB', price => updatePriceAndColor('BNB', price));
+    socket.on('ADA', price => updatePriceAndColor('ADA', price));
+    socket.on('XRP', price => updatePriceAndColor('XRP', price));
+</script>
+
+</body>
+</html>
