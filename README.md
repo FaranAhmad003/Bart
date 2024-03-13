@@ -40,6 +40,10 @@ Frustrated by the complexities and lack of support in existing cryptocurrency tr
 
 ### Educational Resources
 - Tutorials, guides, and articles to help users learn about trading strategies, technical analysis, and risk management.
+- Video tutorial links (YouTube) for additional learning resources.
+
+### Chatbot Integration
+- AI-powered chatbot for instant assistance with user queries, providing comprehensive support throughout the platform.
 
 ### Security
 - SSL encryption, two-factor authentication, and secure password hashing to protect user accounts and data.
@@ -49,6 +53,11 @@ Frustrated by the complexities and lack of support in existing cryptocurrency tr
 
 ### Price Alerts
 - Users can set alerts for specific cryptocurrencies to stay updated on market movements.
+
+### Bonus Features
+
+#### Wallet Integration
+- Secure storage of cryptocurrencies within the platform, with features for depositing, withdrawing, and transferring funds between wallets.
 
 ---
 
