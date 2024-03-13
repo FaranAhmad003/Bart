@@ -99,7 +99,7 @@ While reviewing projects like BART, it becomes evident that user-friendliness an
 
 ## Additional Information
 
-For more details on the project, including installation instructions and usage guidelines, please refer to the [BART Documentation]
+For more details on the project, including installation instructions and usage guidelines, please refer to the BART SRS Document
 ---
 
 
