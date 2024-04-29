@@ -1,5 +1,31 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+  }
+ #goBackButton {
+    background-image: url('assets/back.png'); /* Path to your image */
+    background-size: cover; /* Cover the entire area of the button */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-position: center; /* Center the background image */
+    border: none; /* Remove border */
+    width: 25px; /* Width of the button */
+    height: 25px; /* Height of the button */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+    background-color: black;
+}
 
-<div class="tradingview-widget-container" style="height:100%;width:100%">
+</style>
+<body>
+  <button id="goBackButton"></button>
+  <div class="tradingview-widget-container" style="height:100%;width:100%">
   <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
   <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
   <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
@@ -22,3 +48,6 @@
 }
   </script>
 </div>
+</body>
+</html>
+
