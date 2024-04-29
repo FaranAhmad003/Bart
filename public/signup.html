@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Page</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap">
+  <style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Global Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Form Styles */
+    form {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      margin-top: 93px; /* Add margin on top */
+      margin-bottom: 40px; /* Add margin on bottom */
+    }
+
+
+    h2 {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #555;
+      text-align: left;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #4caf50;
+    }
+
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 14px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .login-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      color: #e74c3c;
+      margin-top: 10px;
+      font-weight: 500;
+      text-align: left;
+    }
+    
+  </style>
+</head>
+<body>
+
+  <form id="signupForm">
+    <h2>Sign Up</h2>
+    <div class="input-group">
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required>
+      <div id="firstNameError" class="error"></div>
+
+      <label for="lastName">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required>
+      <div id="lastNameError" class="error"></div>
+    </div>
+
+    <div class="input-group">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <div id="usernameError" class="error"></div>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+      <div id="emailError" class="error"></div>
+    </div>
+
+    <div class="input-group">
+      <label for="phoneNo">Phone Number:</label>
+      <input type="tel" id="phoneNo" name="phoneNo" pattern="[0-9]{10}" placeholder="Enter 10-digit phone number" required>
+      <div id="phoneNoError" class="error"></div>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <div id="passwordError" class="error"></div>
+    </div>
+
+    <button type="button" onclick="submitForm()">Sign Up</button>
+
+    <div class="login-link">
+      <a href="/login">Already have an account? Log in here</a>
+    </div>
+  </form>
+
+  <script>
+    function submitForm() {
+      // Reset error messages
+      document.getElementById('firstNameError').textContent = '';
+      document.getElementById('lastNameError').textContent = '';
+      document.getElementById('usernameError').textContent = '';
+      document.getElementById('emailError').textContent = '';
+      document.getElementById('phoneNoError').textContent = '';
+      document.getElementById('passwordError').textContent = '';
+
+      // Get form data
+      const formData = {
+        firstName: document.getElementById('firstName').value,
+        lastName: document.getElementById('lastName').value,
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        phoneNo: document.getElementById('phoneNo').value,
+        password: document.getElementById('password').value
+      };
+
+      // Send data to Node.js route (replace 'your-node-route' with the actual route)
+      fetch('/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Handle response from the server
+        console.log(data);
+        if (data.message === 'Signup successful!' && data.secretKey) {
+          // Redirect to signupSuccess.html with the secretKey in the URL
+          window.location.href = `/signupSuccess?secretKey=${encodeURIComponent(data.secretKey)}`;
+        } else if (data.error) {
+          // Display error messages
+          if (data.errorFields) {
+            data.errorFields.forEach(field => {
+              const errorElement = document.getElementById(`${field}Error`);
+              if (errorElement) {
+                errorElement.textContent = data.error;
+              }
+            });
+          } else {
+            alert(data.error); // Display a general error alert if errorFields is not provided
+          }
+        }
+        // You can redirect or show a success message here
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+    }
+  </script>
+</body>
+</html>

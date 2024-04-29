@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      max-width: 90%;
+      text-align: center;
+    }
+    h2 {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: #333;
+    }
+    input {
+      width: calc(100% - 24px);
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+    input:focus {
+      outline: none;
+      border-color: #4caf50;
+    }
+    button {
+      background-color: #4caf50;
+      color: #fff;
+      padding: 12px 0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: calc(100% - 24px);
+      transition: background-color 0.3s ease;
+      font-weight: 600;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .signup-link,
+    .forgot-password-link {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+    .signup-link a,
+    .forgot-password-link a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+    .signup-link a:hover,
+    .forgot-password-link a:hover {
+      text-decoration: underline;
+    }
+    .error-message {
+      color: #e74c3c;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <form id="loginForm">
+    <h2>Login</h2>
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="button" onclick="submitForm()">Log In</button>
+
+    <div class="signup-link">
+      <a href="/signup">Don't have an account? Sign up here</a>
+    </div>
+
+    <div class="forgot-password-link">
+      <a href="/forgotPassword">Forgot Password?</a>
+    </div>
+
+    <div id="errorMessage" class="error-message"></div>
+
+  </form>
+<script>
+function submitForm() {
+  const formData = {
+    username: document.getElementById('username').value,
+    password: document.getElementById('password').value
+  };
+
+  fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      window.location.href = '/index.html'; // Redirect to index.html on successful login
+    } else {
+      document.getElementById('errorMessage').textContent = 'Invalid username or password';
+      document.getElementById('username').style.borderColor = '#e74c3c';
+      document.getElementById('password').style.borderColor = '#e74c3c';
+    }
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signup Success</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600&display=swap">
+  <style>
+    /* Reset CSS */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Global Styles */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Container Styles */
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    p {
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    a {
+      color: #4caf50;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Signup Successful!</h2>
+    <p>Your secret key is:</p>
+    <p id="secretKey"></p>
+    <a href="/login">Go to Login</a>
+  </div>
+
+  <script>
+    // Retrieve the secret key from the URL query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const secretKey = urlParams.get('secretKey');
+
+    // Display the secret key on the page
+    document.getElementById('secretKey').textContent = secretKey;
+  </script>
+</body>
+</html>
