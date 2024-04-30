@@ -25,7 +25,7 @@
 
     <div class="container">
         <nav>
-            <img src = "assets/logo.png" class="logo">
+            <img src = "/assets/logo.png" class="logo">
             <u1>
                 <li><a href="#">Market</a></li>
                 <li><a href="#">Features</a></li>
@@ -35,23 +35,23 @@
             <a href="#" class="btn">EN</a>
         </nav>
     <div class="content">
-        <h1>BUY & SELL <br><span>Crypto</span> </h1>
+        <h1>View and Predict <br><span id="cryptoName"></span></h1>
         <p>Al we deal and predict is crypto</p>
         <a href="/graphs" class = "btn">Explore More</a>
     </div>
     <div class="coin-list">
         <div class="coin">
-            <img src ="assets/bitcoin.png">
-            <div>
-                <h3>$00</h3>
-                <p>Bitcoin</p>
-            </div>
-        </div>
-         <div class="coin">
-            <img src ="assets/ethereum.png">
+            <img src ="/assets/ethereum.png">
             <div>
                 <h3>$00</h3>
                 <p>Ethereum</p>
+            </div>
+        </div>
+         <div class="coin">
+            <img src ="/assets/bitcoin.png">
+            <div>
+                <h3>$00</h3>
+                <p>Bitcoin</p>  
             </div>
         </div>
          <div class="coin">
@@ -65,5 +65,47 @@
 
     </div>
     </div>
+<script>
+        const cryptoNames = ["Bitcoin", "Ethereum", "Crypto"];
+        let currentIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 150;
+        let text = '';
+
+        function cycleCryptoNames() {
+            const span = document.getElementById('cryptoName');
+
+            function type() {
+                if (isDeleting) {
+                    if (charIndex >= 0) {
+                        span.textContent = text.substring(0, charIndex--);
+                        setTimeout(type, 150);
+                    } else {
+                        isDeleting = false;
+                        currentIndex = (currentIndex + 1) % cryptoNames.length;
+                        text = cryptoNames[currentIndex];
+                        charIndex = 0; // Reset char index for new text
+                        setTimeout(type, 500);
+                    }
+                } else {
+                    if (charIndex <= text.length) {
+                        span.textContent = text.substring(0, charIndex++);
+                        setTimeout(type, 150);
+                    } else {
+                        // Start deleting
+                        setTimeout(() => {
+                            isDeleting = true;
+                            setTimeout(type, 150);
+                        }, 2000); // Pause at the end before deleting
+                    }
+                }
+            }
+
+            type();
+        }
+
+        cycleCryptoNames();
+    </script>
 </body>
 </html>

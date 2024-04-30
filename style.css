@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family:'helvetica';
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .container
@@ -20,8 +20,6 @@
     max-height: auto; /* This ensures the aspect ratio is maintained */
     cursor: pointer;
 }
-
-
 nav
 {
     width: 100%;
