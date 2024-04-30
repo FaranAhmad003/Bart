@@ -53,7 +53,9 @@ app.get("/signup", (req, res) => {
 app.get("/index.html", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
-
+app.get("/graphs", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "Graphs.html"));
+});
 // Route to print the entire 'user' table
 app.get("/printTable", (req, res) => {
   connection.query("SELECT * FROM user", (err, results) => {
