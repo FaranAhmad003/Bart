@@ -11,10 +11,12 @@ const path = require("path");
 const http = require("http");
 const { Server } = require("socket.io");
 const WebSocket = require("ws");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
  const server = http.createServer(app);
  const io = new Server(server);
-
+require("dotenv").config();
 // Middleware to parse JSON in the request body
 app.use(bodyParser.json());
 app.use(
@@ -303,6 +305,37 @@ cryptoList.forEach(({ symbol, url }) => {
 });
 
 
+//gemini response generating here
+app.post("/generate-text", async (req, res) => {
+  try {
+    const prompt = req.body.prompt;
+    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = await response.text();
+
+    res.send({ message: text });
+  } catch (error) {
+    console.error("Error generating text:", error);
+    res.status(500).send({ error: "Error generating text" });
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("A user connected");
+
+  // Listen for messages sent from the client
+  socket.on("chatMessage", (msg) => {
+    console.log("Message Received: " + msg);
+
+    // You can process the message here or send a response back
+    const responseMessage = `Received your message: ${msg}`;
+
+    // Emit a response back to the client
+    socket.emit("chatResponse", responseMessage);
+  });
+});
 
 server.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

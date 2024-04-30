@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Popup</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="chatbot" class="chat-popup">
+        <form action="#" class="form-container" onsubmit="sendPrompt(); return false;">
+            <h1>Chat</h1>
+            <textarea id="userInput" placeholder="Type message.." required></textarea>
+            <button type="submit" class="btn">Send</button>
+            <button type="button" class="btn cancel" onclick="closeChat()">Close</button>
+        </form>
+    </div>
+
+    <button class="open-button" onclick="openChat()">Chat</button>
+
+    <script>
+        function openChat() {
+            document.getElementById("chatbot").style.display = "block";
+        }
+
+        function closeChat() {
+            document.getElementById("chatbot").style.display = "none";
+        }
+
+        function sendPrompt() {
+            const userInput = document.getElementById("userInput").value;
+            $.ajax({
+                url: '/generate-text',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ prompt: userInput }),
+                success: function(response) {
+                    alert('AI Response: ' + response.message);
+                },
+                error: function() {
+                    alert('Error processing your request');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
