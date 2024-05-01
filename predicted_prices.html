@@ -3,67 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predicted Dogecoin Prices</title>
-    <!-- Chart.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Price Prediction</title>
+    <!-- Add D3.js library -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <canvas id="priceChart" width="800" height="400"></canvas>
+    <h1>Price Prediction</h1>
+    <div id="chart"></div>
 
     <script>
-        // Function to fetch CSV file and create chart
-        function fetchAndCreateChart() {
-            fetch('D:\BART\Bart\assets\coin_Dogecoin.csv') // Path to the CSV file
-            .then(response => response.text())
-            .then(data => {
-                const rows = data.trim().split('\n');
-                const labels = [];
-                const prices = [];
-                rows.slice(1).forEach(row => {
-                    const columns = row.split(',');
-                    labels.push(columns[0]); // Assuming the first column contains dates
-                    prices.push(parseFloat(columns[1])); // Assuming the second column contains prices
-                });
+        // Read CSV file and create chart
+        d3.csv("\coin_data\coin_Dogecoin.csv").then(function(data) {
+            // Log data to console (for debugging)
+            console.log(data);
 
-                // Create chart
-                const ctx = document.getElementById('priceChart').getContext('2d');
-                const chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Dogecoin Prices',
-                            data: prices,
-                            fill: false,
-                            borderColor: 'rgb(75, 192, 192)',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            x: {
-                                display: true,
-                                title: {
-                                    display: true,
-                                    text: 'Date'
-                                }
-                            },
-                            y: {
-                                display: true,
-                                title: {
-                                    display: true,
-                                    text: 'Price'
-                                }
-                            }
-                        }
-                    }
-                });
-            })
-            .catch(error => console.error('Error fetching CSV:', error));
-        }
+            // Define dimensions for the chart
+            const margin = { top: 20, right: 20, bottom: 40, left: 40 };
+            const width = 800 - margin.left - margin.right;
+            const height = 400 - margin.top - margin.bottom;
 
-        // Call the function to fetch data and create chart when the page loads
-        window.onload = fetchAndCreateChart;
+            // Append SVG to the 'chart' div
+            const svg = d3.select("#chart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            // Define scales for x and y axes
+            const x = d3.scaleTime()
+                .domain(d3.extent(data, d => new Date(d.Date)))
+                .range([0, width]);
+
+            const y = d3.scaleLinear()
+                .domain([0, d3.max(data, d => +d.Close)])
+                .range([height, 0]);
+
+            // Define line function
+            const line = d3.line()
+                .x(d => x(new Date(d.Date)))
+                .y(d => y(+d.Close));
+
+            // Append x-axis
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(x));
+
+            // Append y-axis
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // Append line path
+            svg.append("path")
+                .datum(data)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 2)
+                .attr("d", line);
+        }).catch(function(error) {
+            // Log and handle error if any
+            console.error("Error loading the data: ", error);
+        });
     </script>
 </body>
 </html>
