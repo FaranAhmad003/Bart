@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicted Dogecoin Prices</title>
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="priceChart" width="800" height="400"></canvas>
+
+    <script>
+        // Function to fetch CSV file and create chart
+        function fetchAndCreateChart() {
+            fetch('D:\BART\Bart\assets\coin_Dogecoin.csv') // Path to the CSV file
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.trim().split('\n');
+                const labels = [];
+                const prices = [];
+                rows.slice(1).forEach(row => {
+                    const columns = row.split(',');
+                    labels.push(columns[0]); // Assuming the first column contains dates
+                    prices.push(parseFloat(columns[1])); // Assuming the second column contains prices
+                });
+
+                // Create chart
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Dogecoin Prices',
+                            data: prices,
+                            fill: false,
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            x: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                display: true,
+                                title: {
+                                    display: true,
+                                    text: 'Price'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching CSV:', error));
+        }
+
+        // Call the function to fetch data and create chart when the page loads
+        window.onload = fetchAndCreateChart;
+    </script>
+</body>
+</html>

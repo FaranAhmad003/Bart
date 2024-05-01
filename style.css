@@ -108,3 +108,16 @@ coin h3{
     color: #fff;
     margin-bottom: 5px;
 }
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.predict-btn {
+    background-color: #28a745; /* Green color for predict button */
+}
