@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Typewriter Effect</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace; /* Gives a typewriter-like font */
+            display: flex;
+            justify-content: center; /* Centers the text horizontally */
+            align-items: center; /* Centers the text vertically */
+            height: 100vh; /* Full viewport height */
+            margin: 0;
+            background-color: #f0f0f0; /* Light grey background for better contrast */
+        }
+        #textDisplay {
+            font-size: 24px; /* Larger text size for better visibility */
+            border-right: 2px solid black; /* Simulates the cursor */
+            padding: 8px;
+            white-space: nowrap; /* Ensures text stays on a single line */
+            overflow: hidden; /* Keeps the text from overflowing the container */
+        }
+    </style>
+</head>
+<body>
+   
+    <script>
+        const textElement = document.getElementById('textDisplay');
+        const phrases = ["I am Faran Ahmad", "I am", "I am Software Engineer"];
+        let currentPhrase = 0;
+        let currentCharacter = 0;
+        let deleting = false;
+
+        function type() {
+            // Determine the current phrase and how to manipulate it
+            let displayText = phrases[currentPhrase];
+            if (!deleting) {
+                // Show text up to the current character
+                textElement.textContent = displayText.substring(0, currentCharacter++);
+                if (currentCharacter === displayText.length + 1) {
+                    // After displaying the full text, start deleting after a pause
+                    setTimeout(() => { deleting = true; }, 2000);
+                }
+            } else {
+                // Delete characters one by one
+                textElement.textContent = displayText.substring(0, currentCharacter--);
+                if (currentCharacter === 0) {
+                    // Once fully deleted, move to the next phrase or restart
+                    deleting = false;
+                    currentPhrase = (currentPhrase + 1) % phrases.length;
+                }
+            }
+            // Set timeout for next character update, quicker delete speed
+            setTimeout(type, deleting ? 100 : 150);
+        }
+
+        // Start the typing effect
+        type();
+    </script>
+</body>
+</html>

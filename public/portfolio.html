@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Crypto Portfolio</title>
+    <link rel="stylesheet" href="portfolio.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .back-button {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .back-button:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <button class="back-button" onclick="goBack()">Back</button>
+        <h1>MAI GAREEB HOON GEN1</h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="#holdings">Holdings</a></li>
+                <li><a href="#transactions">Transactions</a></li>
+                <li><a href="#charts">Charts</a></li>
+                <li><a href="#news">News</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="holdings" id="holdings">
+            <h2>Your Crypto Holdings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Coin</th>
+                        <th>Symbol</th>
+                        <th>Price (USD)</th>
+                        <th>Quantity</th>
+                        <th>Total Value (USD)</th>
+                        <th>% Change (24h)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Placeholder for holdings data -->
+                </tbody>
+            </table>
+        </section>
+
+        <section class="transactions" id="transactions">
+            <h2>Transaction History</h2>
+            <ul>
+                <!-- Placeholder for transaction history -->
+            </ul>
+        </section>
+
+        <section class="charts" id="charts">
+            <h2>Cryptocurrency Price Charts</h2>
+            <div class="chart-container">
+                <!-- Placeholder for charts -->
+            </div>
+        </section>
+
+        <section class="news" id="news">
+            <h2>Latest Crypto News</h2>
+            <ul>
+                <!-- Placeholder for news -->
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 My Crypto Portfolio</p>
+    </footer>
+
+    <script>
+        function goBack() {
+            window.location.href = 'index.html'; // Navigate back to index.html
+        }
+    </script>
+</body>
+</html>
+
+
+<script>
+    window.addEventListener('mouseover', initLandbot, { once: true });
+    window.addEventListener('touchstart', initLandbot, { once: true });
+    var myLandbot;
+    function initLandbot() {
+      if (!myLandbot) {
+        var s = document.createElement('script');s.type = 'text/javascript';s.async = true;
+        s.addEventListener('load', function() {
+          var myLandbot = new Landbot.Livechat({
+            configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-2207168-XU8MZK9YF8ORR29Z/index.json',
+          });
+        });
+        s.src = 'https://cdn.landbot.io/landbot-3/landbot-3.0.0.js';
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+      }
+    }
+    </script>

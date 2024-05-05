@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="prediction.css">
+    <title>MetaMask Wallet Integration</title>
+</head>
+<body>
+    <button class="back-button" onclick="navigateBack()">Back</button>
+    <h1>Connecting to MetaMask...</h1>
+
+    <!-- Include Web3.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.0.0-beta.55/dist/web3.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                // MetaMask is installed
+                const web3 = new Web3(window.ethereum);
+
+                try {
+                    // Request account access if needed
+                    await window.ethereum.enable();
+
+                    // Get user's account address
+                    const accounts = await web3.eth.getAccounts();
+                    const userAddress = accounts[0];
+                    console.log("Connected with MetaMask account:", userAddress);
+
+                    // Display user's ETH balance
+                    const balance = await web3.eth.getBalance(userAddress);
+                    console.log("ETH balance:", web3.utils.fromWei(balance, 'ether'), "ETH");
+
+                    // Your additional Web3.js code here...
+                } catch (error) {
+                    console.error("MetaMask account access denied:", error);
+                }
+            } else {
+                // MetaMask is not installed
+                alert("Please install MetaMask to use this site");
+            }
+        });
+    </script>
+        <script src="wallet_Integration.js"></script>
+        <script src="prediction.js"></script>
+</body>
+</html>
+
+
+<script>
+    window.addEventListener('mouseover', initLandbot, { once: true });
+    window.addEventListener('touchstart', initLandbot, { once: true });
+    var myLandbot;
+    function initLandbot() {
+      if (!myLandbot) {
+        var s = document.createElement('script');s.type = 'text/javascript';s.async = true;
+        s.addEventListener('load', function() {
+          var myLandbot = new Landbot.Livechat({
+            configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-2207168-XU8MZK9YF8ORR29Z/index.json',
+          });
+        });
+        s.src = 'https://cdn.landbot.io/landbot-3/landbot-3.0.0.js';
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+      }
+    }
+    </script>
