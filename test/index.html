@@ -3,46 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Popup</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="Wallet_Integration.css">
+    <title>MetaMask Connection</title>
 </head>
 <body>
-    <div id="chatbot" class="chat-popup">
-        <form action="#" class="form-container" onsubmit="sendPrompt(); return false;">
-            <h1>Chat</h1>
-            <textarea id="userInput" placeholder="Type message.." required></textarea>
-            <button type="submit" class="btn">Send</button>
-            <button type="button" class="btn cancel" onclick="closeChat()">Close</button>
-        </form>
+
+<div class="container">
+    <h1>BART Portfolio</h1>
+
+    <div class="account-info">
+        <h2>MetaMask Account Information</h2>
+        <p><strong>Connected Account:</strong> <span id="accountAddress">-</span></p>
+        <p><strong>Account Balance:</strong> <span id="accountBalance">-</span> ETH</p>
+        <button onclick="checkMetaMaskConnection()">Connect Account</button>
     </div>
+</div>
 
-    <button class="open-button" onclick="openChat()">Chat</button>
+<script>
+async function checkMetaMaskConnection() {
+    if (window.ethereum) {
+        try {
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
-    <script>
-        function openChat() {
-            document.getElementById("chatbot").style.display = "block";
+            if (accounts.length > 0) {
+                const accountAddress = accounts[0];
+                displayAccountInfo(accountAddress);
+            } else {
+                await requestAccount();
+            }
+        } catch (error) {
+            console.error('Error checking MetaMask connection:', error);
+            alert('Error checking MetaMask connection. Please try again.');
         }
+    } else {
+        alert('Please install MetaMask Wallet');
+    }
+}
 
-        function closeChat() {
-            document.getElementById("chatbot").style.display = "none";
-        }
+async function requestAccount() {
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accountAddress = accounts[0];
+        displayAccountInfo(accountAddress);
+    } catch (error) {
+        console.error('Error connecting to MetaMask:', error);
+        alert('Error connecting to MetaMask. Please try again.');
+    }
+}
 
-        function sendPrompt() {
-            const userInput = document.getElementById("userInput").value;
-            $.ajax({
-                url: '/generate-text',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ prompt: userInput }),
-                success: function(response) {
-                    alert('AI Response: ' + response.message);
-                },
-                error: function() {
-                    alert('Error processing your request');
-                }
-            });
-        }
-    </script>
+function displayAccountInfo(accountAddress) {
+    document.getElementById('accountAddress').textContent = accountAddress;
+    getAccountBalance(accountAddress);
+}
+
+async function getAccountBalance(accountAddress) {
+    try {
+        const balanceWei = await window.ethereum.request({ method: 'eth_getBalance', params: [accountAddress] });
+        const balanceEth = parseFloat(window.ethereum.utils.fromWei(balanceWei, 'ether')).toFixed(4);
+        document.getElementById('accountBalance').textContent = balanceEth;
+    } catch (error) {
+        alert('Error getting account balance / Balance is 0. Please try again.');
+    }
+}
+</script>
+
 </body>
 </html>

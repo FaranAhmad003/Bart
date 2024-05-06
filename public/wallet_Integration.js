@@ -1,27 +1,46 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    if (typeof window.ethereum !== 'undefined') {
-        // MetaMask is installed
-        const web3 = new Web3(window.ethereum);
 
+async function checkMetaMaskConnection() {
+    if (window.ethereum) {
         try {
-            // Request account access if needed
-            await window.ethereum.enable();
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
 
-            // Get user's account address
-            const accounts = await web3.eth.getAccounts();
-            const userAddress = accounts[0];
-            console.log("Connected with MetaMask account:", userAddress);
-
-            // Display user's ETH balance
-            const balance = await web3.eth.getBalance(userAddress);
-            console.log("ETH balance:", web3.utils.fromWei(balance, 'ether'), "ETH");
-
-            // Your additional Web3.js code here...
+            if (accounts.length > 0) {
+                const accountAddress = accounts[0];
+                displayAccountInfo(accountAddress);
+            } else {
+                await requestAccount();
+            }
         } catch (error) {
-            console.error("MetaMask account access denied:", error);
+            console.error('Error checking MetaMask connection:', error);
+            alert('Error checking MetaMask connection. Please try again.');
         }
     } else {
-        // MetaMask is not installed
-        alert("Please install MetaMask to use this site");
+        alert('Please install MetaMask Wallet');
     }
-});
+}
+
+async function requestAccount() {
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accountAddress = accounts[0];
+        displayAccountInfo(accountAddress);
+    } catch (error) {
+        console.error('Error connecting to MetaMask:', error);
+        alert('Error connecting to MetaMask. Please try again.');
+    }
+}
+
+function displayAccountInfo(accountAddress) {
+    document.getElementById('accountAddress').textContent = accountAddress;
+    getAccountBalance(accountAddress);
+}
+
+async function getAccountBalance(accountAddress) {
+    try {
+        const balanceWei = await window.ethereum.request({ method: 'eth_getBalance', params: [accountAddress] });
+        const balanceEth = parseFloat(window.ethereum.utils.fromWei(balanceWei, 'ether')).toFixed(4);
+        document.getElementById('accountBalance').textContent = balanceEth;
+    } catch (error) {
+        alert('Error getting account balance / Balance is 0. Please try again.');
+    }
+}

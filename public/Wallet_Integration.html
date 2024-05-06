@@ -1,51 +1,32 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="prediction.css">
-    <title>MetaMask Wallet Integration</title>
+    <link rel="stylesheet" href="Wallet_Integration.css">
+    <title>MetaMask Connection</title>
 </head>
 <body>
+
     <button class="back-button" onclick="navigateBack()">Back</button>
-    <h1>Connecting to MetaMask...</h1>
+    
+    <div class="container">
+        <h1>BART Portfolio</h1>
 
-    <!-- Include Web3.js library -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.0.0-beta.55/dist/web3.min.js"></script>
+        <div class="account-info">
+            <h2>MetaMask Account Information</h2>
+            <p><strong>Connected Account:</strong> <span id="accountAddress">-</span></p>
+            <p><strong>Account Balance:</strong> <span id="accountBalance">-</span> ETH</p>
+            <button onclick="checkMetaMaskConnection()">Connect Account</button>
+        </div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            if (typeof window.ethereum !== 'undefined') {
-                // MetaMask is installed
-                const web3 = new Web3(window.ethereum);
-
-                try {
-                    // Request account access if needed
-                    await window.ethereum.enable();
-
-                    // Get user's account address
-                    const accounts = await web3.eth.getAccounts();
-                    const userAddress = accounts[0];
-                    console.log("Connected with MetaMask account:", userAddress);
-
-                    // Display user's ETH balance
-                    const balance = await web3.eth.getBalance(userAddress);
-                    console.log("ETH balance:", web3.utils.fromWei(balance, 'ether'), "ETH");
-
-                    // Your additional Web3.js code here...
-                } catch (error) {
-                    console.error("MetaMask account access denied:", error);
-                }
-            } else {
-                // MetaMask is not installed
-                alert("Please install MetaMask to use this site");
-            }
-        });
-    </script>
-        <script src="wallet_Integration.js"></script>
-        <script src="prediction.js"></script>
+<script src="wallet_Integration.js"></script>
+<script src="prediction.js"></script>
 </body>
 </html>
+
 
 
 <script>
