@@ -17,6 +17,7 @@
     "express": "^4.18.3",
     "express-session": "^1.18.0",
     "mysql2": "^3.9.7",
+    "nodemailer": "^6.9.13",
     "socket.io": "^4.7.5",
     "speakeasy": "^2.0.0",
     "ws": "^8.17.0"

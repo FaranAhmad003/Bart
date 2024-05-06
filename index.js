@@ -13,6 +13,7 @@ const { Server } = require("socket.io");
 const WebSocket = require("ws");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const nodemailer = require("nodemailer");
 
  const server = http.createServer(app);
  const io = new Server(server);
@@ -47,7 +48,10 @@ connection.connect((err) => {
 
 // Serve the HTML page
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/signup.html");
+  res.sendFile(__dirname + "/public/login.html");
+});
+app.get("/login", (req, res) => {
+  res.sendFile(__dirname + "/public/login.html");
 });
 app.get("/signup", (req, res) => {
   res.sendFile(__dirname + "/public/signup.html");
@@ -78,12 +82,18 @@ app.post("/signup", (req, res) => {
   const formData = req.body;
 
   // Check if the email ends with '@gmail.com'
-  if (!formData.email.endsWith("@gmail.com")) {
-    return res
-      .status(400)
-      .json({
-        error: "Invalid email address. Only Gmail addresses are allowed.",
-      });
+  const allowedDomains = [
+    "gmail.com",
+    "yahoo.com",
+    "outlook.com",
+    "lhr.nu.edu.pk",
+    "icloud.com",
+  ];
+  const emailDomain = formData.email.split("@")[1];
+  if (!allowedDomains.includes(emailDomain)) {
+    return res.status(400).json({
+      error: "Invalid email address. Only Gmail addresses are allowed.",
+    });
   }
   if (!isPasswordComplex(formData.password)) {
     return res.status(400).json({
@@ -91,9 +101,10 @@ app.post("/signup", (req, res) => {
         "Password must contain at least one capital letter, one numeric character, and one special character.",
     });
   }
+
   const secretKey = speakeasy.generateSecret({ length: 20 }).base32;
   connection.query(
-    "INSERT INTO user (first_name, last_name, username, password, email, phone_no, secret_key,user_type) VALUES (?, ?, ?, ?, ?, ?, ?,?)",
+    "INSERT INTO user (first_name, last_name, username, password, email, phone_no, secret_key) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
       formData.firstName,
       formData.lastName,
@@ -102,7 +113,6 @@ app.post("/signup", (req, res) => {
       formData.email,
       formData.phoneNo,
       secretKey,
-      "client",
     ],
     (err, results) => {
       if (err) {
@@ -111,11 +121,59 @@ app.post("/signup", (req, res) => {
       } else {
         console.log("Inserted data into user table:", results);
         // Send both success message and secret key in the response
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "chatbotx092@gmail.com",
+            pass: "vlep zify kiem sntq", // Replace with your actual App Password
+          },
+        });
+
+        const mailOptions = {
+          from: "chatbotx092@gmail.com",
+          to: formData.email,
+          subject: "Your Secret Key",
+          html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        /* Your CSS styles here */
+      </style>
+    </head>
+    <body>
+      <h1>Welcome, ${formData.firstName}!</h1>
+      <p>Your signup was successful.</p>
+      <p>Here's your secret key: ${secretKey}</p>
+      <p>Keep this key safe.</p>
+    </body>
+    </html>
+  `,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log("Email sent:", info.response);
+          }
+        });
         res.json({ message: "Signup successful!", secretKey: secretKey });
       }
     }
   );
 });
+
+function isPasswordComplex(password) {
+  // Regular expressions to check for the required conditions
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumeric = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+  // Check if all conditions are met
+  return hasUpperCase && hasLowerCase && hasNumeric && hasSpecialChar;
+}
 app.get("/usernames", (req, res) => {
   connection.query(
     'SELECT username FROM user where user_type = "client"',
@@ -132,28 +190,76 @@ app.get("/usernames", (req, res) => {
   );
 });
 
-function isPasswordComplex(password) {
-  // Regular expressions to check for the required conditions
-  const hasUpperCase = /[A-Z]/.test(password);
-  const hasLowerCase = /[a-z]/.test(password);
-  const hasNumeric = /\d/.test(password);
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
 
-  // Check if all conditions are met
-  return hasUpperCase && hasLowerCase && hasNumeric && hasSpecialChar;
-}
-app.get("/login", (req, res) => {
-  res.sendFile(__dirname + "/public/login.html");
-});
-app.get("/client", (req, res) => {
-  const filePath = path.join(__dirname, "public", "client_home_page.html");
-  fs.readFile(filePath, "utf8", (err, html) => {
-    if (err) {
-      res.status(500).send("Failed to load the client home page.");
-      return;
+app.post("/login", (req, res) => {
+  const formData = req.body;
+
+  // Query the database for the username
+  connection.query(
+    "SELECT * FROM user WHERE username = ?",
+    [formData.username],
+    (err, results) => {
+      if (err) {
+        console.error("Error fetching user:", err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      if (results.length === 0) {
+        // No user found with that username
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+
+      // Define user from the results
+      const user = results[0];
+
+      // Authentication successful, proceed to send response and email
+      res.json({
+        success: true,
+        message: "Login successful!",
+        firstName: user.first_name,
+        lastName: user.last_name,
+        email: user.email,
+      });
+
+      // Email setup and sending process
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "chatbotx092@gmail.com",
+          pass: "vlep zify kiem sntq", // Ensure this is securely stored
+        },
+      });
+
+      const mailOptions = {
+        from: "chatbotx092@gmail.com",
+        to: user.email,
+        subject: "Welcome back",
+        html: `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              /* Your CSS styles here */
+            </style>
+          </head>
+          <body>
+            <h1>Welcome, ${user.first_name}!</h1>
+            <p>Login Successful.</p>
+            <p>Welcome to BART again</p>  
+          </body>
+          </html>
+        `,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log("Email sent:", info.response);
+        }
+      });
     }
-    res.send(html);
-  });
+  );
 });
 
 // Approve or disapprove tickets
