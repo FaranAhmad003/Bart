@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html class="no-js" lang="zxx">
 
@@ -488,3 +489,153 @@
       }
     }
     </script>
+=======
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+<body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    socket.on('ETH', ({ symbol, price }) => {
+        document.querySelector('.coin:nth-child(1) h3').innerText = `$${parseFloat(price).toFixed(2)}`;
+    });
+
+    socket.on('BTC', ({ symbol, price }) => {
+        document.querySelector('.coin:nth-child(2) h3').innerText = `$${parseFloat(price).toFixed(2)}`;
+    });
+
+    socket.on('DOGE', ({ symbol, price }) => {
+        document.querySelector('.coin:nth-child(3) h3').innerText = `$${parseFloat(price).toFixed(2)}`;
+    });
+</script>
+
+    <div class="container">
+        <nav>
+            <img src = "/assets/logo.png" class="logo">
+            <u1>
+                <li><a href="#">Market</a></li>
+                <li><a href="#">Features</a></li>
+                <li><a href="#">White Papers</a></li>
+                <li><a href="#">About Us</a></li>
+            </u1>
+            <a href="#" class="btn">EN</a>
+        </nav>
+    <div class="content">
+        <h1>View and Predict <br><span id="cryptoName"></span></h1>
+        <p>Al we deal and predict is crypto</p>
+        <a href="/graphs" class = "btn">Explore More</a>
+    </div>
+    <div class="coin-list">
+        <div class="coin">
+            <img src ="/assets/ethereum.png">
+            <div>
+                <h3>$00</h3>
+                <p>Ethereum</p>
+            </div>
+        </div>
+         <div class="coin">
+            <img src ="/assets/bitcoin.png">
+            <div>
+                <h3>$00</h3>
+                <p>Bitcoin</p>  
+            </div>
+        </div>
+         <div class="coin">
+            <img src ="assets/dogecoin.png">
+            <div>
+                <h3>$00</h3>
+                <p>Doge Coin</p>
+            </div>
+        </div>
+        
+
+    </div>
+    </div>
+       <div id="chatbot" class="chat-popup">
+        <form action="#" class="form-container" onsubmit="sendPrompt(); return false;">
+            <h1>Chat</h1>
+            <textarea id="userInput" placeholder="Type message.." required></textarea>
+            <button type="submit" class="btn">Send</button>
+            <button type="button" class="btn cancel" onclick="closeChat()">Close</button>
+        </form>
+    </div>
+
+    <button class="open-button" onclick="openChat()">Chat</button>
+<script>
+    
+        const cryptoNames = ["Bitcoin", "Ethereum", "Crypto"];
+        let currentIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typeSpeed = 150;
+        let text = '';
+
+        function cycleCryptoNames() {
+            const span = document.getElementById('cryptoName');
+
+            function type() {
+                if (isDeleting) {
+                    if (charIndex >= 0) {
+                        span.textContent = text.substring(0, charIndex--);
+                        setTimeout(type, 150);
+                    } else {
+                        isDeleting = false;
+                        currentIndex = (currentIndex + 1) % cryptoNames.length;
+                        text = cryptoNames[currentIndex];
+                        charIndex = 0; // Reset char index for new text
+                        setTimeout(type, 500);
+                    }
+                } else {
+                    if (charIndex <= text.length) {
+                        span.textContent = text.substring(0, charIndex++);
+                        setTimeout(type, 150);
+                    } else {
+                        // Start deleting
+                        setTimeout(() => {
+                            isDeleting = true;
+                            setTimeout(type, 150);
+                        }, 2000); // Pause at the end before deleting
+                    }
+                }
+            }
+
+            type();
+        }
+        function openChat() {
+            document.getElementById("chatbot").style.display = "block";
+        }
+
+        function closeChat() {
+            document.getElementById("chatbot").style.display = "none";
+        }
+       function sendPrompt() {
+        const userInput = document.getElementById("userInput").value;
+        // Using AJAX to send a request to the /generate-text endpoint
+        $.ajax({
+            url: '/generate-text',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ prompt: userInput }),
+            success: function(response) {
+                alert('AI Response: ' + response.message); // Display AI response in alert
+                document.getElementById("userInput").value = ""; // Clear input field after sending
+            },
+            error: function() {
+                alert('Error processing your request');
+            }
+        });
+    }
+        cycleCryptoNames();
+    </script>
+</body>
+</html>
+>>>>>>> c03f746d3793e01f58377a3951ad0f925b584f6d
