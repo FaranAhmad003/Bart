@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinTelegraph News Widget</title>
+</head>
+
+<body>
+    <!-- Widget container -->
+    <div id="ct-news-widget-container"></div>
+
+    <!-- CoinTelegraph News Widget Script -->
+    <script src="https://cointelegraph.com/news-widget"
+        data-ct-widget-limit="25"
+        data-ct-widget-theme="light"
+        data-ct-widget-size="medium"
+        data-ct-widget-images="true"
+        data-ct-widget-language="en"
+        async>
+    </script>
+
+    <!-- Display errors in the console -->
+    <script>
+        window.onerror = function (msg, url, lineNo, columnNo, error) {
+            console.error("Error: " + msg + " at " + url + ":" + lineNo);
+        };
+    </script>
+</body>
+
+</html>
