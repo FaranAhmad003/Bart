@@ -1,32 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CoinTelegraph News Widget</title>
-</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c2aef1; 
+    color: #000000; 
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    position: relative; 
+}
 
-<body>
-    <!-- Widget container -->
-    <div id="ct-news-widget-container"></div>
+.logo {
+    position: absolute;
+    top: 20px;
+    left: 20px; 
+    width: 200px; 
+    height: auto; 
+}
+</style>
 
-    <!-- CoinTelegraph News Widget Script -->
-    <script src="https://cointelegraph.com/news-widget"
-        data-ct-widget-limit="25"
-        data-ct-widget-theme="light"
-        data-ct-widget-size="medium"
-        data-ct-widget-images="true"
-        data-ct-widget-language="en"
-        async>
-    </script>
+    <img src= "../assets/images/logo/bart.svg" alt="Logo" class="logo">
+    <h1 style="margin-top: 120px; margin-left: 50px;">News and Updates</h1>
+    <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Track all markets on TradingView</span></a></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+        {
+        "feedMode": "all_symbols",
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "width": "100%",
+        "height": "100%",
+        "colorTheme": "light",
+        "locale": "en"
+        }
+        </script>
+    </div>
 
-    <!-- Display errors in the console -->
-    <script>
-        window.onerror = function (msg, url, lineNo, columnNo, error) {
-            console.error("Error: " + msg + " at " + url + ":" + lineNo);
-        };
-    </script>
-</body>
-
-</html>
