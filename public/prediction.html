@@ -1,42 +1,121 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Price Expectation</title>
-    <link rel="stylesheet" href="prediction.css">
+    <title>LSTM Model Prediction</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="coinClosingPrices.js"></script>
+    <link rel="stylesheet" href="prediction.css" />
+    
+    <script>
+      function navigateToIndex() {
+          window.location.href = 'index.html'; 
+      }
+  </script>
+
+
 </head>
-
 <body>
-    <button class="back-button" onclick="navigateBack()">Back</button>
-    <div class="container">
-        <h1>Crypto Price Expectation with Artificial Intelligence</h1>
-        <div id="predictedPrice" class="predicted-price">
-            <!-- Predicted price will be displayed here -->
-        </div>
-    </div>
+  <h1>BART Prediction</h1>
 
-    <script src="prediction.js"></script>
+  <button onclick="navigateToIndex()" style="position: absolute; top: 10px; left: 10px; background-color: rgb(124, 5, 5); color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">X</button>
+
+  <div>
+      <h3>Input Data:</h3>
+      <p id="inputData">Prices of the certain coin
+      </p>
+
+  </div>
+
+  <button onclick="makePrediction('Solana')" style="background-color: #6b3a8e; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px;">Predict</button>
+
+  <select id="cryptoSelect">
+    <option value="Bitcoin">Bitcoin</option>
+    <option value="Ethereum">Ethereum</option>
+    <option value="Iota">Iota</option>
+    <option value="ChainLink">ChainLink</option>
+    <option value="Dogecoin">Dogecoin</option>
+    <option value="Aave">Aave</option>
+    <option value="Cardano">Cardano</option>
+    <option value="CryptocomCoin">CryptocomCoin</option>
+    <option value="Litecoin">Litecoin</option>
+    <option value="EOS">EOS</option>
+    <option value="Cosmos">Cosmos</option>
+    <option value="BinanceCoin">BinanceCoin</option>
+    <option value="Monero">Monero</option>
+    <option value="Solana">Solana</option>
+    <option value="Polkadot">Polkadot</option>
+    <option value="NEM">NEM</option>
+    <option value="WrappedBitcoin">WrappedBitcoin</option>
+    <option value="USDCoin">USDCoin</option>
+    <option value="Tron">Tron</option>
+    <option value="Stellar">Stellar</option>
+    <option value="Tether">Tether</option>
+    <option value="Uniswap">Uniswap</option>
+    <option value="XRP">XRP</option>
+</select>
+
+  <h3>Prediction Result Accuracy:</h3>
+  <p id="predictionResult">Waiting for prediction...</p>
+
+  <!-- Canvas element for Chart.js -->
+  <canvas id="predictionChart"></canvas>
+
+    <script>
+        // Global variable to hold the chart instance
+        let predictionChart;
+
+        function makePrediction(coinName) {
+            const inputData = coinClosingPrices[coinName];
+
+
+            const url = 'http://localhost:5000/predict';
+
+            axios.post(url, { recent_data: inputData })
+                .then(response => {
+                    document.getElementById('predictionResult').innerText = response.data.prediction;
+
+                    // Update the chart with the prediction result
+                    updateChart(inputData, response.data.prediction);
+                })
+                .catch(error => {
+                    console.error('Error making prediction:', error);
+                    document.getElementById('predictionResult').innerText = 'Error making prediction.';
+                });
+        }
+
+
+        function updateChart(inputData, prediction) {
+            const ctx = document.getElementById('predictionChart').getContext('2d');
+
+            // Check if the chart instance exists
+            if (predictionChart) {
+                predictionChart.destroy(); // Destroy the existing chart instance
+            }
+
+            // Create a new chart instance
+            predictionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: inputData.map((_, index) => index + 1),
+                    datasets: [{
+                        label: 'Predicted Value',
+                        data: [...inputData, prediction], // Combine input data and prediction
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
-
-
-
-<script>
-    window.addEventListener('mouseover', initLandbot, { once: true });
-    window.addEventListener('touchstart', initLandbot, { once: true });
-    var myLandbot;
-    function initLandbot() {
-      if (!myLandbot) {
-        var s = document.createElement('script');s.type = 'text/javascript';s.async = true;
-        s.addEventListener('load', function() {
-          var myLandbot = new Landbot.Livechat({
-            configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-2207168-XU8MZK9YF8ORR29Z/index.json',
-          });
-        });
-        s.src = 'https://cdn.landbot.io/landbot-3/landbot-3.0.0.js';
-        var x = document.getElementsByTagName('script')[0];
-        x.parentNode.insertBefore(s, x);
-      }
-    }
-    </script>
