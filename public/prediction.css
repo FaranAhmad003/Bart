@@ -1,61 +1,149 @@
-body {
-    font-family: Arial, sans-serif;
-    background-color: #001029;
+body, html {
     margin: 0;
     padding: 0;
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle, #ffcc00, #ff6600);
+
 }
 
 .container {
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: #fff; /* Set a white background for the container */
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
 h1 {
-    text-align: center;
-    color: #007bff;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 8px;
+    font-family: georgia, serif;
+    font-size: 80px;
+    color: #ffffff;
+    font-style: normal;
     font-weight: bold;
+    font-variant: normal;
+    text-align: center;
+    letter-spacing: 3.6px;
+    line-height: 27px;
 }
 
-select,
-input[type="number"],
-button {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+h3 {
+    font-size:x-large;
+    color: #ffffff; /* White text color for subheadings */
 }
 
 button {
+    padding: 10px 20px;
     background-color: #007bff;
     color: #fff;
     border: none;
+    border-radius: 5px;
     cursor: pointer;
+    margin-bottom: 20px;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #3e1eb4;
 }
 
-.result {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 18px;
-    text-align: center;
+#inputData {
+    font-size:xx-large;
+    font-family: monospace;
+    color: #fff; /* White text color for input data */
 }
+
+#predictionResult {
+    font-weight: bold;
+    color: #cedfcf; /* White text color for prediction result */
+}
+
+canvas {
+    font-size: 50px;
+    margin-top: 20px;
+    margin-left: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px #ffcc00;
+}
+
+/* Styling for the select dropdown */
+#cryptoSelect {
+    appearance: none; /* Hide the default arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 10px; /* Padding around the select */
+    font-size: 16px; /* Font size */
+    border: 1px solid #ccc; /* Border */
+    border-radius: 5px; /* Rounded corners */
+    background-color: #f8f9fa; /* Background color */
+    color: #333; /* Text color */
+    width: 100%; /* Full width */
+    max-width: 300px; /* Maximum width */
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+/* Style for the dropdown arrow */
+#cryptoSelect::after {
+    content: '\25BC'; /* Unicode character for down arrow (▼) */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none; /* Avoid click events on the arrow */
+}
+
+/* Hover and focus styles */
+#cryptoSelect:hover, #cryptoSelect:focus {
+    border-color: #5c2cb6; /* Border color on hover/focus */
+}
+
+/* Styling for option elements */
+#cryptoSelect option {
+    padding: 10px; /* Padding inside each option */
+    background-color: #fff; /* Background color of options */
+    color: #333; /* Text color of options */
+}
+
+#cryptoSelect option:hover {
+    background-color: #007bff; /* Background color on hover */
+    color: #fff; /* Text color on hover */
+}
+
+
+#predictionChartContainer {
+    width: 50%; /* Set a percentage width for responsiveness */
+    max-width: 800px; /* Limit the maximum width of the chart container */
+    margin: 20px auto; /* Center the chart horizontally with top and bottom margin */
+    border: 1px solid #ddd; /* Optional: Add a border around the chart */
+    border-radius: 8px; /* Optional: Rounded corners for the chart container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for a 3D effect */
+}
+
+/* Styling for the chart canvas */
+#predictionChart {
+    width: 70%; /* Make canvas responsive within its container */
+    height: 300px; /* Set a fixed height or adjust as needed */
+    border-radius: 8px; /* Optional: Rounded corners for the chart canvas */
+}
+
+/* prediction.css */
+
+/* Style for the back button */
+/* .back-button {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 5px; 
+    padding: 10px 15px;
+    background-color: #b10000;
+    color: rgb(7, 1, 1);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+/* Hover effect for the back button */
+/* .back-button:hover {
+    background-color: #e40000; 
+} */ */
